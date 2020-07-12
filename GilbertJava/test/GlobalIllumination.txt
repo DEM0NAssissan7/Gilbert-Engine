@@ -1,0 +1,252 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author abdur
+ */
+public class GlobalIllumination {
+                    //Global illumination
+                    
+                    //Check if global illumination is enabled
+                    if(gbilm){
+                        
+                        //Initializing variables
+                        ArrayList<Integer> rpx = new ArrayList<>();
+                        ArrayList<Integer> rpy = new ArrayList<>();
+                        
+                        ArrayList<Integer> rpx2 = new ArrayList<>();
+                        ArrayList<Integer> rpy2 = new ArrayList<>();
+                        
+                        ArrayList<Integer> px = new ArrayList<>();
+                        ArrayList<Integer> py = new ArrayList<>();
+                        
+                        ArrayList<Integer> px2 = new ArrayList<>();
+                        ArrayList<Integer> py2 = new ArrayList<>();
+                        
+                        //Initialize the illumination points
+                        ArrayList<Integer> globalX = new ArrayList<>();
+                        ArrayList<Integer> globalY = new ArrayList<>();
+                        
+                        //Take all the points in the objects
+                        for(var p = 0; p < objectsx.size(); p++){
+                            
+                            //Init object
+                            int[] objectx = objectsx.get(p);
+                            int[] objecty = objectsy.get(p);
+                            
+                            //Init record
+                            int record = width*1000;
+                            int recordi = 0;
+                            
+                            //Find the least distance of the light for each point
+                            for(var sp = 0; sp < objectx.length; sp++){
+                            
+                            int pointx = objectx[sp];
+                            int pointy = objecty[sp];
+                            
+                            int distx = Math.abs(pointx-lposx);
+                            int disty = Math.abs(pointy-lposy);
+                            int tdist = distx+disty;
+                            
+                            if(tdist<record){
+                                recordi=sp+1;
+                                record=tdist;
+                                }
+                            }
+                            
+                            //Overflow prevention
+                            if(recordi >= objectx.length){
+                                recordi = 0;
+                            }
+                            
+                            //Now grab the two points for object when the loop is done
+                            
+                                int pointx = objectx[recordi];
+                                int pointy = objecty[recordi];
+                            
+                                int npointx;
+                                int npointy;
+                                
+                                //Get the next next point
+                                if(objectx.length<3){
+                                    
+                                    if(objectx.length==2){
+                                    npointx = objectx[1];
+                                    npointy = objecty[1];
+                                    }else{
+                                    npointx = objectx[0];
+                                    npointy = objecty[0];
+                                    }
+                                }else{
+                                    if(recordi+2>=objectx.length){
+                                        npointx = objectx[0];
+                                        npointy = objecty[0];
+                                    }else{
+                                    npointx = objectx[recordi+2];
+                                    npointy = objecty[recordi+2];
+                                    }
+                                }
+                                
+                                
+                                //Now calculate the ray point position
+                                int rayposx = (pointx-lposx);
+                                int rayposy = (pointy-lposy);
+                                
+                                int rayposx2 = (npointx-lposx);
+                                int rayposy2 = (npointy-lposy);
+                                
+                                //Put it in an array
+                                rpx.add(rayposx);
+                                rpy.add(rayposy);
+                                rpx2.add(rayposx2);
+                                rpy2.add(rayposy2);
+                                
+                                px.add(pointx);
+                                py.add(pointy);
+                                px2.add(npointx);
+                                py2.add(npointy);
+                            }
+                    
+                        //Calculate the points for the polygon
+                        for(int p = 0; p < px.size(); p+=2){
+                            
+                            int np = p+1;
+                            
+                            int cpx = px.get(p);
+                            int cpx2 = px2.get(p);
+                            int crx = rpx.get(p);
+                            int crx2 = rpx2.get(p);
+                            
+                            int cpy = py.get(p);
+                            int cpy2 = py2.get(p);
+                            int cry = rpy.get(p);
+                            int cry2 = rpy2.get(p);
+                            
+                            if(np >= px.size()){
+                                np=0;
+                            }
+                            
+                            int npx = px.get(np);
+                            int npx2 = px2.get(np);
+                            int nrx = rpx.get(np);
+                            int nrx2 = rpx2.get(np);
+                            
+                            int npy = py.get(np);
+                            int npy2 = py2.get(np);
+                            int nry = rpy.get(np);
+                            int nry2 = rpy2.get(np);
+                            
+                            
+                            globalX.add(crx);
+                            globalX.add(cpx);
+                            globalX.add(cpx2);
+                            globalX.add(crx2);
+                            
+                            globalY.add(cry);
+                            globalY.add(cpy);
+                            globalY.add(cpy2);
+                            globalY.add(cry2);
+                            
+                            if(crx2>=width/2&&nrx>=width/2){
+                                
+                            globalX.add(npx);
+                            globalX.add(nrx);
+                            globalX.add(npx2);
+                            globalX.add(nrx2);
+                            
+                            globalY.add(npy);
+                            globalY.add(nry);
+                            globalY.add(npy2);
+                            globalY.add(nry2);
+                            
+                            }else if(crx2<width/2&&nrx<width/2){
+                                    
+                            globalX.add(npx);
+                            globalX.add(nrx);
+                            globalX.add(npx2);
+                            globalX.add(nrx2);
+                            
+                            globalY.add(npy);
+                            globalY.add(nry);
+                            globalY.add(npy2);
+                            globalY.add(nry2);
+                            
+                            }else if(cry2>=height/2&&nry>=height/2){
+                                
+                            globalX.add(npx);
+                            globalX.add(nrx);
+                            globalX.add(npx2);
+                            globalX.add(nrx2);
+                            
+                            globalY.add(npy);
+                            globalY.add(nry);
+                            globalY.add(npy2);
+                            globalY.add(nry2);
+                                
+                            }else if(cry2<height/2&&nry<height/2){
+                                
+                            globalX.add(npx);
+                            globalX.add(nrx);
+                            globalX.add(npx2);
+                            globalX.add(nrx2);
+                            
+                            globalY.add(npy);
+                            globalY.add(nry);
+                            globalY.add(npy2);
+                            globalY.add(nry2);
+                                
+                            }else if(cry2>=height/2){
+                                
+                                if(crx2>=width/2){
+                                    globalX.add(width);
+                                    globalY.add(height);
+                                    
+                                }if(crx2<width/2){
+                                    if(crx<width/2){
+                                    }else{
+                                    globalX.add(0);
+                                    globalY.add(height);
+                                    }
+                                }
+                                
+                            }else if(cry2<height/2){
+                                
+                                if(crx2>=width/2){
+                                    if(cry<=0){
+                                        
+                                    }else{
+                                        globalX.add(width);
+                                        globalY.add(0);
+                                    }
+                                }else{
+                                        globalX.add(0);
+                                        globalY.add(height);
+                                }
+                            }
+                        }
+                        
+                        
+                    //And finally, rendering the illumination
+                    
+                    //Set the color
+                    g.setColor(new Color(255,255,255,50/lightsx.size()));
+                    
+                    //Convert arraylist to int[]
+                    int[] glx2 = new int[globalX.size()];
+                    int[] gly2 = new int[globalX.size()];
+                    for(int gx = 0; gx < globalX.size(); gx++){
+                        glx2[gx] = globalX.get(gx);
+                        gly2[gx] = globalY.get(gx);
+                    }
+                    
+                    //Draw the polygon
+                    g.fillPolygon(glx2, gly2, globalX.size());
+                    
+                    
+                    
+                    }
+}
