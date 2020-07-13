@@ -29,7 +29,9 @@ public class Main extends Canvas {
         JFrame frame = new JFrame("Gilbert Engine Example");
         canvas = new Main();
         canvas.setSize(width, height);
-        canvas.setBackground(Color.white);
+        
+        canvas.setBackground(Color.gray);
+        
         frame.add(canvas);
         frame.pack();
         frame.setVisible(true);
@@ -44,10 +46,19 @@ public class Main extends Canvas {
     
     @Override
     public void paint(Graphics g) {
+        
         if(!init){
-            init=true;
             example.init();
+            init=true;
+        }else{
+            boolean hasGlobal = (boolean) example.gilbert.getOptions()[0];
+            if(hasGlobal){
+                canvas.setBackground(Color.black);
+            }else{
+                canvas.setBackground(Color.white);
+            }
         }
+        
         example.RunExample(g);
     }
 }

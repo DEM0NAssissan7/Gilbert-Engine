@@ -17,7 +17,7 @@ public class GilbertEngine extends Thread{
     //Setting default values so the program doesn't break
     int width = 400;
     int height = 400;
-    boolean gbilm = true;
+    boolean gbilm = false;
     boolean renderObjects=false;
     Color gbcol = new Color(255,255,255,10);
     
@@ -61,6 +61,12 @@ public class GilbertEngine extends Thread{
         gbcol = color;
     }
     
+    //Get options to help with scene adjustment
+    public Object[] getOptions(){
+        return new Object[]{gbilm, renderObjects, width, height, gbcol};
+        
+    }
+    
     //This renders all the points and shades them
     public void update(Graphics g){ 
                 //Have every light render every object
@@ -99,20 +105,20 @@ public class GilbertEngine extends Thread{
                     int pointy2 = objecty[na];
                     
                     //Calculate slopes for shading                    
-                    double xSlope = pointx-lposx;
-                    double ySlope = pointy-lposy;
-                    double xSlope2 = pointx2-lposx;
-                    double ySlope2 = pointy2-lposy;
+                    double xSlope = (pointx-lposx);
+                    double ySlope = (pointy-lposy);
+                    double xSlope2 = (pointx2-lposx);
+                    double ySlope2 = (pointy2-lposy);
 
                     //Calculate end point for polygon at the edge of the window
                     int endRayX = (int) (xSlope*width);
                     int endRayY = (int) (ySlope*height);
                     int endRayX2 = (int) (xSlope2*width);
                     int endRayY2 = (int) (ySlope2*height);
-                    
+
                     //Render shadows
                     
-                    //Check is global illumination is off
+                    //Check if global illumination is off
                     if(!gbilm){
                         
                     //Calculate points for polygon and put them in an array so they render correctly
@@ -135,15 +141,15 @@ public class GilbertEngine extends Thread{
                     g.fillPolygon(shadeX, shadeY, shadeX.length);
                     
                     }
+                    
+                    
+                    
                     if(gbilm){
                         //If global illumination is on, render global illumination
                         
                         //Initializer
                         int[] globalX = new int[9];
                         int[] globalY = new int[9];
-                        
-                        double[] temprays = new double[2];
-                        double[] temprays2 = new double[2];
                         
                         //Organize the illumination to render the opposite of the shadows
                         
@@ -158,61 +164,37 @@ public class GilbertEngine extends Thread{
                         globalY[3] = endRayY2;
                             
                         //Do a little math to figure out how the rest of the polygon should be arranged and loop around
-                            if(endRayX2<pointx2){
+                            if(endRayY2>=pointy2){
                                 
-                                globalX[4] = 0;
+                                //When the light is above the point
                                 globalY[4] = height;
-                                
-                                globalX[5] = width;
-                                globalY[5] = height;
-                                
-                                globalX[6] = width;
+                                globalY[5] = 0;
                                 globalY[6] = 0;
-                                
-                                globalX[7] = 0;
-                                globalY[7] = 0;
+                                globalY[7] = height;
                                 
                             }else{
-                                globalX[4] = width;
+                                
+                                //When the light is below the point
                                 globalY[4] = 0;
-                                
-                                globalX[5] = 0;
-                                globalY[5] = 0;
-                                
-                                globalX[6] = 0;
+                                globalY[5] = height;
                                 globalY[6] = height;
+                                globalY[7] = 0;
                                 
-                                globalX[7] = width;
-                                globalY[7] = height;
                             }
-                            if(endRayY2>pointy2){
+                            
+                            if(endRayX2<=pointx2){
+                                //If the light is to the right of the point
                                 
                                 globalX[4] = width;
-                                globalY[4] = height;
-                                
                                 globalX[5] = width;
-                                globalY[5] = 0;
-                                
                                 globalX[6] = 0;
-                                globalY[6] = 0;
-                                
                                 globalX[7] = 0;
-                                globalY[7] = height;
-                                
                             }else{
                                 
                                 globalX[4] = 0;
-                                globalY[4] = 0;
-                                
                                 globalX[5] = 0;
-                                globalY[5] = height;
-                                
                                 globalX[6] = width;
-                                globalY[6] = height;
-                                
                                 globalX[7] = width;
-                                globalY[7] = 0;
-                                
                             }
                                 
                         globalX[8] = endRayX;

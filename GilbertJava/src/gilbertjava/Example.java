@@ -17,6 +17,8 @@ public class Example{
     
     //Here is the way you can initialize the engine
     GilbertEngine gilbert = new GilbertEngine();
+    
+    //Initializer
     public void init(){
         
         //Here is how to add a wall or object to shade
@@ -37,13 +39,14 @@ public class Example{
         //Here is how you set the options for the engine
         //The first two are for dimensions
         //The third is for whether the program is in renderObjects mode which draws the polygon. This can be useful for debugging
-        gilbert.setOptions(width, height, false);
+        gilbert.setOptions(width, height, true);
         
         //This is how you set the global illumination settings
         //It is recommended to set this to false
         //You can set the color of the light, which you cannot do without this
         //This feature could be buggy so use at your own risk
-        gilbert.setGlobalIllumination(false, new Color(0,0,0,10));
+        //Make sure the color of the background is different than the color of the illumination
+        gilbert.setGlobalIllumination(false, new Color(255,255,255,10));
         
         //Here is how you can add lights to the scene
         gilbert.addLgt(width/2,height);
