@@ -17,15 +17,20 @@ public class Example{
         
         //Here is how to add a wall or object to shade
         //You need to specify the location of the points in space. Order matters.
+        //This order of points makes a triangle
         int objectx[] = {100,100,200};
         int objecty[] = {100,200,200};
         //Then put it in the function
         gilbert.addObj(objectx, objecty);
         
         //You can do this a couple times
+        
+        //Square
         objectx = new int[]{400,500,500,400};
         objecty = new int[]{600,600,700,700};
         gilbert.addObj(objectx, objecty);
+        
+        //Octagon
         objectx = new int[]{600,650,700,700,650,600,550,550};
         objecty = new int[]{500,500,550,600,650,650,600,550};
         gilbert.addObj(objectx, objecty);

@@ -30,7 +30,7 @@ public class Main extends Canvas {
     public static void main(String[] args){
         canvas.setSize(width, height);
         
-        canvas.setBackground(Color.gray);
+        canvas.setBackground(Color.white);
         
         frame.add(canvas);
         frame.pack();
@@ -50,14 +50,13 @@ public class Main extends Canvas {
         if(!init){
             example.init();
             init=true;
-        }else{
+        }
             boolean hasGlobal = (boolean) example.gilbert.getOptions()[0];
             if(hasGlobal){
                 canvas.setBackground(Color.black);
             }else{
                 canvas.setBackground(Color.white);
-            }
-        }
+            }        
         
         example.RunExample(g);
     }
