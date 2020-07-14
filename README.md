@@ -27,7 +27,7 @@ for product logos that need photorealism for professionalism.
 The engine doesn't require any real installation, but it does not run on it's own.
 The program was designed for netbeans 12 running java 14, so make sure you have those two ready if you want to use it.
 
-To run the project, download the code and extract the zip file from github. Go into netbeans, click on file in the top left, and click open project. Navigate to your downloads folder or wherever you extracted the zip. 
+To run the project, download the code and extract the zip file from github. Go into netbeans, click on "file" in the top left, and click open project. Navigate to your downloads folder or wherever you extracted the zip. 
 
 Choose GilbertJava for a simple polygon shader. This engine is recommended as it performs the best and is the only fully developed shader. 
 
@@ -42,8 +42,8 @@ After you open which project you want, open the source packages and open Example
 
 Putting the gilbert engine in your program is quite easy as the entire engine is contained within a single .java file. 
 
-To put the gilbert engine in your program, you will first need to look at "Install Instructions" above to continue.
+To put the gilbert engine in your program, you will first need to look at "Running Instructions" above to continue.
 
-After you install the engine into netbeans, take the GilbertEngine.java file and put it in the package you want to use it in. Next, look at the Example.java file in the Gilbert Java project in netbeans. See how to use the program and implement them into your program.
+After you install the engine into netbeans, take the GilbertEngine.java file and put it in the package you want to use it in. Next, look at the Example.java file in the"Gilbert Java" project in netbeans. See how to use the program and implement them into your program.
 
 Disclaimer: The implementation is currently not available for GilbertJR or GilbertPRoJava
