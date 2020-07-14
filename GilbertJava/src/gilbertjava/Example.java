@@ -7,10 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 public class Example{
-    
     //The example function
-    //You don't need to copy this
-    
     
     //Here is the way you can initialize the engine
     GilbertEngine gilbert = new GilbertEngine();
