@@ -68,14 +68,11 @@ public class GilbertEngine extends Thread{
     }
     
     //This renders all the points and shades them
-    public void update(Graphics g){ 
+    public void update(Graphics g){
                 //Have every light render every object
                 for(var aa = 0; aa < lightsx.size(); aa++){
-                    int lposx = lightsx.get(aa);
-                    int lposy = lightsy.get(aa);
-                    
-        //Check if global illumination is on
-        
+                    int lightx = lightsx.get(aa);
+                    int lighty = lightsy.get(aa);
 
         for (int i = 0; i < objectsx.size(); i++) {
             
@@ -95,8 +92,8 @@ public class GilbertEngine extends Thread{
                     }
                     
                     //Initializing points array
-                    int shadeX[] = new int[5];
-                    int shadeY[] = new int[5];
+                    int shadeX[] = new int[9];
+                    int shadeY[] = new int[9];
                     
                     //Initialize the points
                     int pointx = objectx[a];
@@ -104,17 +101,11 @@ public class GilbertEngine extends Thread{
                     int pointx2 = objectx[na];
                     int pointy2 = objecty[na];
                     
-                    //Calculate slopes for shading                    
-                    double xSlope = (pointx-lposx);
-                    double ySlope = (pointy-lposy);
-                    double xSlope2 = (pointx2-lposx);
-                    double ySlope2 = (pointy2-lposy);
-
                     //Calculate end point for polygon at the edge of the window
-                    int endRayX = (int) (xSlope*width);
-                    int endRayY = (int) (ySlope*height);
-                    int endRayX2 = (int) (xSlope2*width);
-                    int endRayY2 = (int) (ySlope2*height);
+                    int endRayX = (int) ((pointx-lightx)*width);
+                    int endRayY = (int) ((pointy-lighty)*height);
+                    int endRayX2 = (int) ((pointx2-lightx)*width);
+                    int endRayY2 = (int) ((pointy2-lighty)*height);
 
                     //Render shadows
                     
@@ -138,67 +129,60 @@ public class GilbertEngine extends Thread{
                     g.setColor(new Color(0,0,0,120));
                     
                     //Draw the polygon
-                    g.fillPolygon(shadeX, shadeY, shadeX.length);
+                    g.fillPolygon(shadeX, shadeY, 5);
                     
-                    }
-                    
-                    
-                    
-                    if(gbilm){
-                        //If global illumination is on, render global illumination
-                        
-                        //Initializer
-                        int[] globalX = new int[9];
-                        int[] globalY = new int[9];
+                    }else{
+                        //If global illumination is not off, render global illumination
                         
                         //Organize the illumination to render the opposite of the shadows
                         
-                        globalX[0] = endRayX;
-                        globalX[1] = pointx;
-                        globalX[2] = pointx2;
-                        globalX[3] = endRayX2;
+                        shadeX[0] = endRayX;
+                        shadeX[1] = pointx;
+                        shadeX[2] = pointx2;
+                        shadeX[3] = endRayX2;
                         
-                        globalY[0] = endRayY;
-                        globalY[1] = pointy;
-                        globalY[2] = pointy2;
-                        globalY[3] = endRayY2;
+                        shadeY[0] = endRayY;
+                        shadeY[1] = pointy;
+                        shadeY[2] = pointy2;
+                        shadeY[3] = endRayY2;
                             
                         //Do a little math to figure out how the rest of the polygon should be arranged and loop around
                             if(endRayY2>=pointy2){
                                 
                                 //When the light is above the point
-                                globalY[4] = height;
-                                globalY[5] = 0;
-                                globalY[6] = 0;
-                                globalY[7] = height;
+                                shadeY[4] = height;
+                                shadeY[5] = 0;
+                                shadeY[6] = 0;
+                                shadeY[7] = height;
                                 
                             }else{
                                 
                                 //When the light is below the point
-                                globalY[4] = 0;
-                                globalY[5] = height;
-                                globalY[6] = height;
-                                globalY[7] = 0;
+                                shadeY[4] = 0;
+                                shadeY[5] = height;
+                                shadeY[6] = height;
+                                shadeY[7] = 0;
                                 
                             }
                             
                             if(endRayX2<=pointx2){
                                 //If the light is to the right of the point
                                 
-                                globalX[4] = width;
-                                globalX[5] = width;
-                                globalX[6] = 0;
-                                globalX[7] = 0;
+                                shadeX[4] = width;
+                                shadeX[5] = width;
+                                shadeX[6] = 0;
+                                shadeX[7] = 0;
                             }else{
+                                //If it is to the left
                                 
-                                globalX[4] = 0;
-                                globalX[5] = 0;
-                                globalX[6] = width;
-                                globalX[7] = width;
+                                shadeX[4] = 0;
+                                shadeX[5] = 0;
+                                shadeX[6] = width;
+                                shadeX[7] = width;
                             }
-                                
-                        globalX[8] = endRayX;
-                        globalY[8] = endRayY;
+                        //Complete the polygon by leading it back to the initial point
+                        shadeX[8] = endRayX;
+                        shadeY[8] = endRayY;
                                 
                         //Render the polygons
                         
@@ -206,7 +190,7 @@ public class GilbertEngine extends Thread{
                         g.setColor(gbcol);
                         
                         //Now, draw the polygon
-                        g.fillPolygon(globalX, globalY, globalX.length);
+                        g.fillPolygon(shadeX, shadeY, 9);
                     }
                     }
                     //Fill in the points

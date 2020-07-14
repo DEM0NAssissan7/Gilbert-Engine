@@ -21,13 +21,13 @@ public class Main extends Canvas {
     
     static boolean init = false;
     
-    public static Canvas canvas;
+    public static Canvas canvas = new Main();
     
     Example example = new Example();
     
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Gilbert Engine Example");
-        canvas = new Main();
+    static JFrame frame = new JFrame("Gilbert Engine Example");
+    
+    public static void main(String[] args){
         canvas.setSize(width, height);
         
         canvas.setBackground(Color.gray);
