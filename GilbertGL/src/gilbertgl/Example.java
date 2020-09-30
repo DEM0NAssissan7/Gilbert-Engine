@@ -12,12 +12,16 @@ public class Example{
     //Here is the way you can initialize the engine
     GilbertEngine gilbert = new GilbertEngine();
     
+    //Defining mouse coordinates. This is for the example. This does not have to be in your program
+    double[] mouseX = new double[1];
+    double[] mouseY = new double[1];
+    
     //Initializer
     public void init(){
         
         //Here is how to add a wall or object to shade
         //You need to specify the location of the points in space. Order matters.
-        //This order of points makes a triangle
+        //This order of points makes a right triangle
         int objectx[] = {100,100,200};
         int objecty[] = {100,200,200};
         //Then put it in the function
@@ -27,31 +31,37 @@ public class Example{
         
         //Square
         objectx = new int[]{400,500,500,400};
-        objecty = new int[]{600,600,700,700};
+        objecty = new int[]{600,600,700,600};
         gilbert.addObj(objectx, objecty);
         
         //Octagon
-        objectx = new int[]{600,650,700,700,650,600,550,550};
-        objecty = new int[]{500,500,550,600,650,650,600,550};
+        objectx = new int[]{600,650,700,700,650,600,550,550,600};
+        objecty = new int[]{500,500,550,600,650,650,600,550,500};
         gilbert.addObj(objectx, objecty);
+        
+        //Watch dogs?
+//        objectx = new int[]{600,600,650,700,700,650};
+//        objecty = new int[]{310,400,350,400,310,450};
+//        gilbert.addObj(objectx, objecty);
         
         //Here is how you set the options for the engine
         //The first two are for dimensions
         //The third is for whether the program is in renderObjects mode which draws the polygon. This can be useful for debugging
-        gilbert.setOptions(width, height, false);
+        gilbert.setOptions(width, height, false, true);
         
         //Here is how you can add lights to the scene
         gilbert.addLgt(width/2,height);
         gilbert.addLgt(80,height/2);
-        gilbert.addLgt(600,350);
+        gilbert.addLgt(600,250);
         
         //This is how you can change a given light's position
         //The last parameter is the index of the light you want to change
         gilbert.chgLgt(width/2, height/2, 0);
         
         //Here is how you can change a given objects's points
-        objectx = new int[]{100,100,200};
-        objecty = new int[]{100,200,200};
+        objectx = new int[]{100,100,200,100};
+        objecty = new int[]{100,200,200,100};
+        
         //The last parameter is the index of the object you want to change
         gilbert.chgObj(objectx , objecty, 0);
         
@@ -63,9 +73,10 @@ public class Example{
         //Be advised: This is required to be in your code for the engine to render anything
         //This must be in your paint function
         gilbert.update();
-        double[] mouseX = new double[1];
-        double[] mouseY = new double[1];
-                glfwGetCursorPos(window, mouseX, mouseY);
+        
+        //Cursor positioning stuff for glfw
+        //This does not need to be in your program
+        glfwGetCursorPos(window, mouseX, mouseY);
         gilbert.chgLgt((int)mouseX[0],(int)mouseY[0],0);
     }
 }

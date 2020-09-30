@@ -1,8 +1,9 @@
 //I named my package "gilbertjava" but you need to put your package name here
 //package (insert package name here);
-package gilbertgl;
+package chicekn;
 
 //Imports
+import gilbertgl.*;
 import java.util.ArrayList;
 import org.lwjgl.opengl.GL11;
 
@@ -70,8 +71,7 @@ public class GilbertEngine extends Thread{
         int shadeX[] = new int[5];
         int shadeY[] = new int[5];
         
-        int wot = width/2;
-        int hot = height/2;
+        int na = 0;
                     
         //Have every light render every object
         for(var aa = 0; aa < lightsx.size(); aa++){
@@ -90,17 +90,18 @@ public class GilbertEngine extends Thread{
                 //Initializing variables to be used outside of loop
 
                 //Get every point to shade
-                for(int a = 0; a < objectx.length; a++){
+                for(var a = 0; a < objectx.length; a++){
 
                     //Calculate next a
                     
-                    int na = a+1;
-                    if(na>=objectx.length){
-                        
-                        na=a;
+                    if(na>=objectx.length-1){
                         if(connectPoints){
                             na = 0;
+                        }else{
+                            na=a;
                         }
+                    }else{
+                        na = a+1;
                     }
 
                     //Initialize the points
@@ -113,14 +114,36 @@ public class GilbertEngine extends Thread{
 
                     //Calculate points for polygon and put them in an array so they render correctly
                     shadeX[0] = pointx;
-                    shadeX[1] = (pointx-lightx)*width;
-                    shadeX[2] = (pointx2-lightx)*width;
+                    if(pointx-lightx!=0){
+                        shadeX[1] = pointx/(pointx-lightx);    
+                    }else{
+                        shadeX[1] = (lightx-pointx)*width;
+                    }
+                    
+                    if(lightx-pointx2!=0){
+                        shadeX[2] = pointx2/(pointx2-lightx);    
+                    }else{
+                        shadeX[2] = (lightx-pointx2)*width;
+                    }
+//                    shadeX[1] = (pointx-lightx)*width;
+//                    shadeX[2] = (pointx2-lightx)*width;
                     shadeX[3] = pointx2;
                     shadeX[4] = pointx;
 
                     shadeY[0] = pointy;
-                    shadeY[1] = (pointy-lighty)*height;
-                    shadeY[2] = (pointy2-lighty)*height;
+                    if(pointy-lighty!=0){
+                        shadeY[1] = pointy/(pointy-lighty);    
+                    }else{
+                        shadeY[1] = (lighty-pointy)*height;
+                    }
+                    
+                    if(lighty-pointy2!=0){
+                        shadeY[2] = pointy2/(pointy2-lighty);    
+                    }else{
+                        shadeY[2] = (lighty-pointy2)*height;
+                    }
+//                    shadeY[1] = ((pointy-lighty)*(height));
+//                    shadeY[2] = ((pointy2-lighty)*height);
                     shadeY[3] = pointy2;
                     shadeY[4] = pointy;
 
@@ -128,9 +151,12 @@ public class GilbertEngine extends Thread{
                     GL11.glColor4f(0.0f, 0.0f, 0.0f, 0.3f);
                     GL11.glBegin(6);
                     for(int glin = 0; glin < 5;glin++){
-                        float obx = shadeX[glin]-wot;
-                        float oby = -(shadeY[glin]-hot);
-                        GL11.glVertex2f(obx/wot, oby/hot);
+                        float obx = shadeX[glin]-(width/2);
+                        float oby = shadeY[glin]-(height/2);
+
+                        float suffx = (obx/(width/2));
+                        float suffy = (-oby/(height/2));
+                        GL11.glVertex2f(suffx, suffy);
                     }
                     GL11.glEnd();
 
